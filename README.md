@@ -60,5 +60,14 @@ Aplicação web completa para gerenciar sessões de estudo/trabalho usando o **m
 - `docs/relatorio-analise.md` – análise do código legado
 - `docs/plano-acao.md` – plano de evolução em fases
 - `docs/VERIFICACAO-FRONTEND.md` – checklist para verificar se o frontend está funcionando
+## Contatos do Autor:
+- Nome: Luciano Ferreira Silva
+- E-mail: lucianoferreira4628@gmail.com
 
 Sinta-se à vontade para explorar, estudar o código e adaptar o projeto às suas necessidades. 😊  
+
+<img width="1881" height="890" alt="image" src="https://github.com/user-attachments/assets/bff5d6d2-c6ff-468a-806e-97f7d55cb176" />
+
+<img width="1885" height="921" alt="image" src="https://github.com/user-attachments/assets/7365ae75-2311-48cc-8438-d509a8c67dba" />
+
+

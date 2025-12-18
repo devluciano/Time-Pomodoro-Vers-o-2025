@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <!-- CSS do Bootstrap 5 -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+   <!-- meu CSS externo -->
+   <link rel="stylesheet" href="./assets/css/style.css">
+
+   <!-- Font Awesome 6 -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+   
+   <!-- SweetAlert2 -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+   <!-- icone -->
+   <link rel="icon" href="./img/logo.png" type="image/png">
+
+   <title>Timer Pomodoro</title>
+</head>
+
+<body class="bg-dark">
+
+   <!-- Menu -->
+   <nav class="navbar navbar-expand-lg navbar-light bg-danger px-3 px-md-4">
+      <div class="container-fluid">
+         <a class="navbar-brand fw-bold text-white" href="index.html" aria-label="Timer Pomodoro - Página inicial">
+            <i class="fa-solid fa-clock me-2" aria-hidden="true"></i>
+            Timer Pomodoro
+         </a>
+
+         <div class="ms-auto d-flex align-items-center gap-2">
+            <a href="./estatisticas.html" id="btn-history" class="btn btn-sm btn-outline-light" aria-label="Ver histórico" title="Ver histórico e estatísticas">
+               <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+            </a>
+            
+            <button id="btn-music" class="btn btn-sm btn-outline-light" aria-label="Pausar música" title="Pausar/Retomar música de fundo">
+               <i id="music-icon" class="fa-solid fa-volume-high" aria-hidden="true"></i>
+            </button>
+            
+            <button id="btn-reset" class="btn btn-sm btn-outline-light d-none" aria-label="Cancelar timer" title="Cancelar timer e voltar ao início">
+               <i class="fa-solid fa-stop me-1" aria-hidden="true"></i>
+               <span class="d-none d-md-inline">Cancelar</span>
+            </button>
+            
+            <a href="#" id="pause-link" role="button" aria-label="Pausar timer" class="text-white text-decoration-none" title="Pausar timer">
+               <i id="pause" class="fa-solid fa-pause" style="font-size: 25pt; display: none;" aria-hidden="true"></i>
+            </a>
+
+            <a href="#" id="play-link" role="button" aria-label="Retomar timer" class="text-white text-decoration-none" title="Retomar timer">
+               <i id='play' class="fa-solid fa-play" style="font-size: 25pt; display: none;" aria-hidden="true"></i>
+            </a>
+
+            <audio id="lofi" src="./audio/lo-fi.mp3" type="audio/mpeg" loop preload="none"></audio>
+         </div>
+      </div>
+   </nav>
+   <!-- /Menu -->
+
+   <!-- Container -->
+
+   <div class="container">
+
+      <!-- Config -->
+
+      <div class="row d-flex justify-content-center mt-5 mb-5">
+
+         <div class="col-md-8">
+
+
+            <div id="config" class="row d-flex justify-content-center">
+
+               <div class="col">
+
+                  <!-- Inputs de Matéria e Aula -->
+                  <div class="row d-flex justify-content-center mb-4">
+                     <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                           <label class="d-flex justify-content-center text-white fw-bold"
+                              for="materia" aria-label="Nome da matéria">Matéria</label>
+                           <input type="text" class="form-control form-control-lg bg-dark border-0 shadow text-white"
+                              id="materia" placeholder="Ex: Matemática, Programação..." aria-label="Nome da matéria" required>
+                           <small class="text-danger" id='erro_materia'></small>
+                           <small class="text-muted text-center d-block mt-1">Ex: Matemática, Programação, Inglês...</small>
+                        </div>
+                     </div>
+                     <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                           <label class="d-flex justify-content-center text-white fw-bold"
+                              for="nome_aula" aria-label="Nome da aula">Nome da Aula</label>
+                           <input type="text" class="form-control form-control-lg bg-dark border-0 shadow text-white"
+                              id="nome_aula" placeholder="Ex: Aula 1, Capítulo 3..." aria-label="Nome da aula" required>
+                           <small class="text-danger" id='erro_nome_aula'></small>
+                           <small class="text-muted text-center d-block mt-1">Ex: Aula 1, Capítulo 3, Revisão...</small>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /Inputs de Matéria e Aula -->
+
+                  <!-- Inputs -->
+                  <div class="row d-flex justify-content-center">
+                     <div class="col-md-3 d-flex justify-content-center">
+                        <div class="form-group">
+                           <label class="d-flex justify-content-center text-white fw-bold"
+                              for="acao" aria-label="Minutos de ação">Ação</label>
+                           <input type="number" class="form-control form-control-lg bg-dark border-0 shadow text-white"
+                              id="acao" min="1" max="120" required aria-label="Minutos de ação" aria-describedby="erro_acao" placeholder="25" value="">
+                           <small class="text-danger" id='erro_acao'></small>
+                        </div>
+                     </div>
+                     <div class="col-md-3 d-flex justify-content-center">
+                        <div class="form-group">
+                           <label class="d-flex justify-content-center text-white fw-bold"
+                              for="pausa" aria-label="Minutos de pausa">Pausa</label>
+                           <input type="number" class="form-control form-control-lg bg-dark border-0 shadow text-white"
+                              id="pausa" min="1" max="120" required aria-label="Minutos de pausa" aria-describedby="erro_pausa" placeholder="5" value="">
+                           <small class="text-danger" id='erro_pausa'></small>
+                        </div>
+                     </div>
+                     <div class="col-md-3 d-flex justify-content-center">
+                        <div class="form-group">
+                           <label class="d-flex justify-content-center text-white fw-bold"
+                              for="sessoes" aria-label="Número de sessões">Sessões</label>
+                           <input type="number" class="form-control form-control-lg bg-dark border-0 shadow text-white"
+                              id="sessoes" min="1" max="50" required aria-label="Número de sessões" aria-describedby="erro_sessoes" placeholder="4" value="">
+                           <small class="text-danger" id='erro_sessoes'></small>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Inputs -->
+
+                  <!-- Botões iniciar e limpar -->
+                  
+                  <div class="row mt-5 mb-5 justify-content-center text-center config-actions">
+                     <div class="col-md-4 col-sm-6 mb-3">
+                        <button id="btn-iniciar" class="btn btn-danger shadow btn-lg w-100 btn-action" aria-label="Iniciar timer Pomodoro">
+                           <i class="fa-solid fa-play me-2" aria-hidden="true"></i>
+                           Iniciar
+                        </button>
+                     </div>
+                     <div class="col-md-4 col-sm-6 mb-3">
+                        <button id="btn-limpar" class="btn btn-outline-secondary shadow btn-lg w-100 btn-secondary-action" aria-label="Limpar todos os campos">
+                           <i class="fa-solid fa-eraser me-2" aria-hidden="true"></i>
+                           Limpar
+                        </button>
+                     </div>
+                  </div>
+
+                  <!-- /Botões iniciar e limpar -->
+
+               </div>
+
+            </div>
+
+         </div>
+
+      </div>
+      <!-- /config -->
+
+      <!-- Timer -->
+
+      <div id="timer" class="mt-2 d-flex justify-content-center">
+
+         <div class="row mb-3">
+            <div class="col">
+               <h3 id='title' class="text-center"></h3>
+            </div>
+         </div>
+
+         <!-- Relogio -->
+         <div class="row shadow time">
+            <div class="col-5 p-0 ">
+               <h2 id="minutes_ok"></h2>
+            </div>
+            <div class="col-1 p-0 d-flex justify-content-center">
+               <h2>:</h2>
+            </div>
+            <div class="col-5 pl-0">
+               <h2 id="seconds_ok"></h2>
+            </div>
+         </div>
+         <!-- /Relogio -->
+
+         <!-- Barra de Progresso -->
+         <div class="row mt-4 mb-3" id="progress-bar" style="display: none;">
+            <div class="col-md-8 mx-auto">
+               <div class="progress-container">
+                  <div class="progress-bar-fill progress-bar-fill-action" id="progress-bar-fill"></div>
+               </div>
+            </div>
+         </div>
+         <!-- /Barra de Progresso -->
+
+         <div class="row mt-5">
+            <div class="col">
+               <h3 id='title_sessao' class="text-center text-secondary"></h3>
+            </div>
+         </div>
+
+      </div>
+      <!-- /Timer -->
+
+      <!-- Finalização -->
+      <div id="fim" style="display: none;">
+         <h1 class="text-success text-center">Parabéns! Você finalizou suas tarefas.</h1>
+         <div class="row mt-5 mb-5 d-flex justify-content-center">
+            <div class="col-md-9 d-flex justify-content-center">
+               <a href="./index.html" class="btn btn-danger shadow btn-lg">Inicio</a>
+            </div>
+         </div>
+      </div>
+      <!-- /Finalização -->
+
+      <!-- Histórico de Sessões (removido - agora em página separada) -->
+
+   </div>
+   <!-- /Container -->
+
+
+
+   <!-- Bootstrap 5 JS Bundle -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
+   
+   <!-- Carregamento de módulos JavaScript -->
+   <script type="module">
+      // Verificar se está sendo acessado via file://
+      if (window.location.protocol === 'file:') {
+         // Mostrar mensagem de erro
+         document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container')
+            if (container) {
+               container.innerHTML = `
+                  <div class="row mt-5">
+                     <div class="col-md-8 mx-auto">
+                        <div class="alert alert-danger" role="alert">
+                           <h4 class="alert-heading">
+                              <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                              Erro de CORS
+                           </h4>
+                           <p>
+                              <strong>Módulos ES6 não funcionam com protocolo file://</strong>
+                           </p>
+                           <hr>
+                           <p class="mb-0">
+                              Para usar este aplicativo, você precisa acessá-lo via servidor HTTP.
+                           </p>
+                           <p class="mt-3">
+                              <strong>Como resolver:</strong>
+                           </p>
+                           <ol>
+                              <li>Certifique-se de que o Laragon está rodando</li>
+                              <li>Acesse via: <code>http://localhost/Projeto-Timer-Pomodoro-main/</code></li>
+                              <li>Ou: <code>http://127.0.0.1/Projeto-Timer-Pomodoro-main/</code></li>
+                           </ol>
+                        </div>
+                     </div>
+                  </div>
+               `
+            }
+         })
+      } else {
+         // Carregar módulos quando DOM estiver pronto
+         function loadApp() {
+            import('./src/js/main.js').catch(error => {
+               console.error('Erro ao carregar módulo:', error)
+               alert('Erro ao carregar aplicativo. Verifique o console para mais detalhes.')
+            })
+         }
+         
+         if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadApp)
+         } else {
+            loadApp()
+         }
+      }
+   </script>
+      <footer class="text-center text-white app-footer">By Luciano silva - 2026</footer>
+</body>
+
+</html>

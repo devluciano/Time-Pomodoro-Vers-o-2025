@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <!-- CSS do Bootstrap 5 -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+   <!-- meu CSS externo -->
+   <link rel="stylesheet" href="./assets/css/style.css">
+
+   <!-- Font Awesome 6 -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+   
+   <!-- Chart.js para gráficos -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+   
+   <!-- jsPDF para exportação -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+   
+   <!-- SweetAlert2 -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+   <!-- icone -->
+   <link rel="icon" href="./img/logo.png" type="image/png">
+
+   <title>Estatísticas - Timer Pomodoro</title>
+</head>
+
+<body class="bg-dark">
+
+   <!-- Menu -->
+   <nav class="navbar navbar-expand-lg navbar-light bg-danger px-3 px-md-4">
+      <div class="container-fluid d-flex justify-content-between align-items-center">
+         <a class="navbar-brand text-white fw-bold" href="./index.html">
+            <i class="fa-solid fa-clock me-2"></i>Timer Pomodoro
+         </a>
+         <div class="d-flex gap-2 align-items-center">
+            <a href="./index.html" class="btn btn-sm btn-outline-light">
+               <i class="fa-solid fa-home me-1"></i><span class="d-none d-md-inline">Voltar</span>
+            </a>
+         </div>
+      </div>
+   </nav>
+   <!-- /Menu -->
+
+   <!-- Container -->
+   <div class="container mt-4 mb-5">
+      
+      <!-- Cabeçalho com Filtros e Exportar -->
+      <div class="card bg-dark border-secondary mb-4">
+         <div class="card-header bg-secondary d-flex justify-content-between align-items-center flex-wrap">
+            <h4 class="text-white mb-0">
+               <i class="fa-solid fa-chart-line me-2"></i>
+               Análise e Estatísticas de Estudos
+            </h4>
+            <div class="d-flex gap-2 flex-wrap">
+               <button id="btn-exportar-pdf" class="btn btn-sm btn-danger">
+                  <i class="fa-solid fa-file-pdf me-1"></i> Exportar PDF
+               </button>
+               <button id="btn-atualizar-stats" class="btn btn-sm btn-primary">
+                  <i class="fa-solid fa-sync-alt me-1"></i> Atualizar
+               </button>
+            </div>
+         </div>
+         <div class="card-body">
+            <div class="row mb-3">
+               <div class="col-md-2 mb-2">
+                  <label class="text-white">Data Início:</label>
+                  <input type="date" id="filtro-data-inicio" class="form-control bg-dark text-white border-secondary">
+               </div>
+               <div class="col-md-2 mb-2">
+                  <label class="text-white">Data Fim:</label>
+                  <input type="date" id="filtro-data-fim" class="form-control bg-dark text-white border-secondary">
+               </div>
+               <div class="col-md-2 mb-2">
+                  <label class="text-white">Matéria:</label>
+                  <select id="filtro-materia" class="form-select bg-dark text-white border-secondary">
+                     <option value="">Todas as matérias</option>
+                  </select>
+               </div>
+               <div class="col-md-2 mb-2">
+                  <label class="text-white">Nome da Aula:</label>
+                  <input type="text" id="filtro-aula" class="form-control bg-dark text-white border-secondary" placeholder="Buscar por aula...">
+               </div>
+               <div class="col-md-2 mb-2">
+                  <label class="text-white">Status:</label>
+                  <select id="filtro-status" class="form-select bg-dark text-white border-secondary">
+                     <option value="">Todos os status</option>
+                     <option value="em_andamento">Em Andamento</option>
+                     <option value="pausado">Pausado</option>
+                     <option value="completo">Completo</option>
+                     <option value="cancelado">Cancelado</option>
+                  </select>
+               </div>
+               <div class="col-md-2 mb-2 d-flex align-items-end">
+                  <button id="btn-filtrar" class="btn btn-primary w-100">
+                     <i class="fa-solid fa-filter me-1"></i> Filtrar
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Estatísticas Gerais -->
+      <div class="row mb-4">
+         <div class="col-md-3 mb-3">
+            <div class="card bg-dark border-success">
+               <div class="card-body text-center">
+                  <h5 class="text-success"><i class="fa-solid fa-book me-2"></i>Total de Sessões</h5>
+                  <h2 class="text-white" id="stat-total-sessoes">0</h2>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-3 mb-3">
+            <div class="card bg-dark border-info">
+               <div class="card-body text-center">
+                  <h5 class="text-info"><i class="fa-solid fa-clock me-2"></i>Tempo Focado</h5>
+                  <h2 class="text-white" id="stat-tempo-focado">0h 0m</h2>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-3 mb-3">
+            <div class="card bg-dark border-warning">
+               <div class="card-body text-center">
+                  <h5 class="text-warning"><i class="fa-solid fa-pause-circle me-2"></i>Tempo de Pausa</h5>
+                  <h2 class="text-white" id="stat-tempo-pausa">0h 0m</h2>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-3 mb-3">
+            <div class="card bg-dark border-primary">
+               <div class="card-body text-center">
+                  <h5 class="text-primary"><i class="fa-solid fa-graduation-cap me-2"></i>Matérias</h5>
+                  <h2 class="text-white" id="stat-total-materias">0</h2>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="row mb-4">
+         <div class="col-md-6 mb-3">
+            <div class="card bg-dark border-secondary">
+               <div class="card-header bg-secondary">
+                  <h5 class="text-white mb-0">Tempo por Matéria</h5>
+               </div>
+               <div class="card-body">
+                  <canvas id="chart-materias"></canvas>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-6 mb-3">
+            <div class="card bg-dark border-secondary">
+               <div class="card-header bg-secondary">
+                  <h5 class="text-white mb-0">Evolução Diária</h5>
+               </div>
+               <div class="card-body">
+                  <canvas id="chart-evolucao"></canvas>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Lista de Aulas Estudadas -->
+      <div class="card bg-dark border-secondary">
+         <div class="card-header bg-secondary d-flex justify-content-between align-items-center flex-wrap">
+            <h5 class="text-white mb-0">
+               <i class="fa-solid fa-list me-2"></i>
+               Histórico Completo de Aulas
+            </h5>
+            <div class="d-flex align-items-center gap-2">
+               <span class="text-white small" id="info-paginacao">Mostrando 0-0 de 0</span>
+            </div>
+         </div>
+         <div class="card-body p-0">
+            <div class="table-responsive">
+               <table class="table table-dark table-hover mb-0" id="tabela-aulas">
+                  <thead>
+                     <tr>
+                        <th>Data</th>
+                        <th>Matéria</th>
+                        <th>Nome da Aula</th>
+                        <th>Sessões</th>
+                        <th>Tempo Focado</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                     </tr>
+                  </thead>
+                  <tbody id="tbody-aulas">
+                     <tr>
+                        <td colspan="7" class="text-center">Carregando...</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <!-- Paginação -->
+            <div class="card-footer bg-secondary">
+               <nav aria-label="Navegação de páginas">
+                  <ul class="pagination justify-content-center mb-0" id="paginacao">
+                     <!-- Preenchido dinamicamente -->
+                  </ul>
+               </nav>
+            </div>
+         </div>
+      </div>
+
+   </div>
+   <!-- /Container -->
+
+   <!-- Bootstrap 5 JS Bundle -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
+   
+   <!-- Carregamento de módulos JavaScript -->
+   <script type="module">
+      import { ApiManager } from './src/js/modules/ApiManager.js'
+      import { StatsManager } from './src/js/modules/StatsManager.js'
+      
+      // Inicializar aplicativo
+      let statsManager = null
+      
+      async function initStatsPage() {
+         try {
+            const api = new ApiManager()
+            statsManager = new StatsManager(api)
+            
+            // Tornar statsManager global para os botões de ação
+            window.statsManager = statsManager
+            
+            // Configurar event listeners
+            const btnFiltrar = document.getElementById('btn-filtrar')
+            if (btnFiltrar) {
+               btnFiltrar.addEventListener('click', () => {
+                  // Resetar para primeira página ao filtrar
+                  if (window.statsManager) {
+                     window.statsManager.paginaAtual = 1
+                  }
+                  carregarEstatisticas()
+               })
+            }
+            
+            // Permitir buscar por Enter no campo de aula
+            const filtroAula = document.getElementById('filtro-aula')
+            if (filtroAula) {
+               filtroAula.addEventListener('keypress', (e) => {
+                  if (e.key === 'Enter') {
+                     if (window.statsManager) {
+                        window.statsManager.paginaAtual = 1
+                     }
+                     carregarEstatisticas()
+                  }
+               })
+            }
+            
+            const btnAtualizarStats = document.getElementById('btn-atualizar-stats')
+            if (btnAtualizarStats) {
+               btnAtualizarStats.addEventListener('click', () => {
+                  carregarEstatisticas()
+               })
+            }
+            
+            const btnExportarPDF = document.getElementById('btn-exportar-pdf')
+            if (btnExportarPDF) {
+               btnExportarPDF.addEventListener('click', () => {
+                  statsManager.exportarPDF()
+               })
+            }
+            
+            // Carregar estatísticas ao abrir a página
+            await carregarEstatisticas()
+            
+         } catch (error) {
+            console.error('Erro ao inicializar página de estatísticas:', error)
+            alert('Erro ao carregar estatísticas. Verifique o console.')
+         }
+      }
+      
+      async function carregarEstatisticas() {
+         try {
+            const dataInicio = document.getElementById('filtro-data-inicio')?.value || 
+               new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            const dataFim = document.getElementById('filtro-data-fim')?.value || 
+               new Date().toISOString().split('T')[0]
+            const materiaId = document.getElementById('filtro-materia')?.value || null
+            const nomeAula = document.getElementById('filtro-aula')?.value?.trim() || null
+            const status = document.getElementById('filtro-status')?.value || null
+            
+            // Definir valores padrão nos filtros
+            if (document.getElementById('filtro-data-inicio') && !document.getElementById('filtro-data-inicio').value) {
+               document.getElementById('filtro-data-inicio').value = dataInicio
+            }
+            if (document.getElementById('filtro-data-fim') && !document.getElementById('filtro-data-fim').value) {
+               document.getElementById('filtro-data-fim').value = dataFim
+            }
+            
+            await statsManager.carregarEstatisticas(dataInicio, dataFim, materiaId, nomeAula, status)
+         } catch (error) {
+            console.error('Erro ao carregar estatísticas:', error)
+            alert('Erro ao carregar estatísticas. Verifique o console.')
+         }
+      }
+      
+      // Aguardar DOM estar pronto
+      if (document.readyState === 'loading') {
+         document.addEventListener('DOMContentLoaded', initStatsPage)
+      } else {
+         initStatsPage()
+      }
+   </script>
+   
+   <footer class="text-center text-white app-footer">By Luciano silva - 2026</footer>
+</body>
+
+</html>
+

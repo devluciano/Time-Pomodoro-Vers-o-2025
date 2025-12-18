@@ -1,0 +1,274 @@
+/* ============================================
+   FASE 2: CSS MODERNIZADO
+   ============================================ */
+
+/* Variáveis CSS */
+:root {
+   --primary-color: #dc3545;
+   --success-color: #28a745;
+   --timer-size: 20rem;
+   --input-size: 150px;
+   --input-font-size: 50pt;
+   --timer-font-size: 90pt;
+   --title-font-size: 25pt;
+   --transition-speed: 0.3s;
+}
+
+/* Reset básico */
+* {
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+}
+
+/* Navbar - Espaçamento adequado */
+.navbar {
+   padding-left: 1rem;
+   padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+   .navbar {
+      padding-left: 2rem;
+      padding-right: 2rem;
+   }
+}
+
+/* Botões do navbar */
+.navbar .btn {
+   min-width: 40px;
+   transition: all 0.3s ease;
+}
+
+.navbar .btn:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Links do navbar */
+.navbar a[role="button"] {
+   padding: 0.5rem;
+   border-radius: 4px;
+   transition: all 0.3s ease;
+}
+
+.navbar a[role="button"]:hover {
+   background-color: rgba(255, 255, 255, 0.1);
+   transform: scale(1.1);
+}
+
+/* Inputs customizados */
+input[type="number"] {
+   width: var(--input-size);
+   height: var(--input-size);
+   font-size: var(--input-font-size);
+   text-align: center;
+}
+
+/* Remover botões de incremento/decremento do input number */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+
+input[type="number"] {
+   -moz-appearance: textfield;
+}
+
+/* Timer circular */
+.time {
+   color: #fff;
+   text-align: center;
+   width: var(--timer-size);
+   height: var(--timer-size);
+   border-radius: calc(var(--timer-size) / 2);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: auto;
+   transition: transform var(--transition-speed) ease;
+}
+
+.time:hover {
+   transform: scale(1.02);
+}
+
+/* Display do tempo */
+h2 {
+   font-size: var(--timer-font-size);
+   font-weight: bold;
+   margin: 0;
+   line-height: 1;
+}
+
+/* Timer oculto por padrão */
+#timer {
+   display: none;
+}
+
+/* Animações suaves */
+#config,
+#timer,
+#fim {
+   transition: opacity var(--transition-speed) ease;
+}
+
+/* Botões com transição */
+.btn {
+   transition: all var(--transition-speed) ease;
+}
+
+.btn:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Botões principais de ação */
+.config-actions {
+   max-width: 700px;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+.btn-action,
+.btn-secondary-action {
+   border-radius: 999px;
+   letter-spacing: 0.5px;
+}
+
+.btn-action {
+   font-weight: 600;
+}
+
+.btn-secondary-action {
+   border-width: 2px;
+}
+
+/* Links de controle (pause/play) */
+#pause-link,
+#play-link {
+   transition: opacity var(--transition-speed) ease;
+   cursor: pointer;
+}
+
+#pause-link:hover,
+#play-link:hover {
+   opacity: 0.8;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+   :root {
+      --input-size: 120px;
+      --input-font-size: 40pt;
+      --timer-size: 16rem;
+      --timer-font-size: 70pt;
+   }
+}
+
+@media (max-width: 576px) {
+   :root {
+      --input-size: 100px;
+      --input-font-size: 35pt;
+      --timer-size: 14rem;
+      --timer-font-size: 60pt;
+   }
+   
+   .time {
+      width: var(--timer-size);
+      height: var(--timer-size);
+      border-radius: calc(var(--timer-size) / 2);
+   }
+}
+
+/* Melhorias de acessibilidade */
+input:focus,
+button:focus,
+a:focus {
+   outline: 2px solid var(--primary-color);
+   outline-offset: 2px;
+}
+
+/* Barra de Progresso */
+.progress-container {
+   width: 100%;
+   height: 20px;
+   background-color: rgba(255, 255, 255, 0.1);
+   border-radius: 10px;
+   overflow: hidden;
+   position: relative;
+}
+
+.progress-bar-fill {
+   height: 100%;
+   width: 0%;
+   transition: width 0.3s ease, background-color 0.3s ease;
+   border-radius: 10px;
+}
+
+.progress-bar-fill-action {
+   background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+.progress-bar-fill-break {
+   background: linear-gradient(90deg, #dc3545, #fd7e14);
+}
+
+/* Histórico */
+.card {
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+   transition: transform var(--transition-speed) ease;
+}
+
+.card:hover {
+   transform: translateY(-2px);
+}
+
+/* Animações de entrada */
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+      transform: translateY(10px);
+   }
+   to {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+#timer.show,
+#fim.show {
+   animation: fadeIn var(--transition-speed) ease;
+}
+
+/* Melhorias de acessibilidade */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+   outline: 3px solid var(--primary-color);
+   outline-offset: 2px;
+}
+
+/* Navegação por teclado - indicadores visuais */
+.skip-link {
+   position: absolute;
+   top: -40px;
+   left: 0;
+   background: var(--primary-color);
+   color: white;
+   padding: 8px;
+   text-decoration: none;
+   z-index: 100;
+}
+
+.skip-link:focus {
+   top: 0;
+}
+
+/* Rodapé */
+.app-footer {
+   margin-top: 3rem;
+   margin-bottom: 1.5rem;
+   font-size: 0.9rem;
+}

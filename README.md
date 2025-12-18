@@ -2,7 +2,7 @@
 
 Aplicação web completa para gerenciar sessões de estudo/trabalho usando o **método Pomodoro**, com **integração em PHP/MySQL**, histórico detalhado e estatísticas diárias.
 
-## 🚀 Funcionalidades Implementadas  
+## 🚀 Novas Funcionalidades Implementadas  
 
 - **Configuração de sessão Pomodoro**
   - Campos: **Matéria**, **Nome da Aula**, **Ação (min)**, **Pausa (min)**, **Sessões**

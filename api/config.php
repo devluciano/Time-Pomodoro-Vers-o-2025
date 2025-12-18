@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Ajuste conforme sua configuração
 define('DB_HOST', 'localhost:3306');
 define('DB_USER', 'root');
-define('DB_PASS', ''); // Senha vazia conforme solicitado
+define('DB_PASS', ''); 
 define('DB_NAME', 'time_pomodoro');
 define('DB_CHARSET', 'utf8mb4');
 
